@@ -1,6 +1,6 @@
 {
   "version": "0.2.0",
-  "configurations": [
+  "configurations": [ 
     {
       "name": "Debug Main Process",
       "type": "node",
@@ -24,7 +24,7 @@
       },
       "runtimeArgs": [
         "${workspaceRoot}/main.js",
-        "--remote-debugging-port=9222"
+        "--remote-debugging-port=49044"
       ],
       "webRoot": "${workspaceRoot}"
     }

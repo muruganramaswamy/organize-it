@@ -26,7 +26,8 @@ function processFormFdf() {
       folder: "",
       nSubfolders: 0,
       nFiles: 0,
-      folderSize: 0
+      folderSize: 0,
+      checksum:0
     };
 
     folderProperties.folder = folder;
@@ -36,36 +37,24 @@ function processFormFdf() {
 }
 
 function fileExists(filename){
-    try{
-      require('fs').accessSync(filename)
-      return true;
-    }catch(e){
-      return false;
-    }
+  try{
+    require('fs').accessSync(filename)
+    return true;
+  }catch(e){
+    return false;
   }
-
-function fileHash( file, hasher, callback ){
-  //Instantiate a reader		  
-  var reader = new FileReader();
-      
-  //What to do when we gets data?
-  reader.onload = function( e ){
-    var hash = hasher(e.target.result);
-    callback( hash );
-  }
-    
-  reader.readAsBinaryString( file );
 }
 
-function getFolderProperties(folderProperties1) {
+function getFolderProperties(folderPropertiesInp) {
   var folderProperties = {
     folder: "",
     nSubfolders: 0,
     nFiles: 0,
-    folderSize: 0
+    folderSize: 0,
+    checksum: 0
   };
 
-  folderProperties.folder = folderProperties1.folder;
+  folderProperties.folder = folderPropertiesInp.folder;
 
   var folderContents = fs.readdirSync(folderProperties.folder, 'utf8');
   
@@ -74,21 +63,15 @@ function getFolderProperties(folderProperties1) {
 
     try {
       if (fs.statSync(currentFolderContent).isFile()) {
-        checksum = md5File.sync(currentFolderContent);
         folderProperties.nFiles += 1;
         folderProperties.folderSize += fs.statSync(currentFolderContent).size;
+        folderProperties.checksum = md5File.sync(currentFolderContent);
       }
       else {
-        var subFolderPropertiesInp = {
-          folder: "",
-          nSubfolders: 0,
-          nFiles: 0,
-          folderSize: 0
-        };
         folderProperties.nSubfolders += 1;
-        subFolderPropertiesInp.folder = currentFolderContent;
+        folderPropertiesInp.folder = currentFolderContent;
         
-        subFolderProperties = getFolderProperties(subFolderPropertiesInp);
+        subFolderProperties = getFolderProperties(folderPropertiesInp);
         folderProperties.nSubfolders += subFolderProperties.nSubfolders;
         folderProperties.nFiles += subFolderProperties.nFiles;
         folderProperties.folderSize += subFolderProperties.folderSize;
@@ -98,7 +81,21 @@ function getFolderProperties(folderProperties1) {
     }
   });
 
+  folderProperties.checksum = md5dir(folderProperties.folder);
+
   console.log(folderProperties);
+
+  document.write(folderProperties.folder);
+  document.write("<br>");
+  document.write(folderProperties.nSubfolders);
+  document.write("<br>");
+  document.write(folderProperties.nFiles);
+  document.write("<br>");
+  document.write(folderProperties.folderSize);
+  document.write("<br>");
+  document.write(folderProperties.checksum);
+  document.write("<br>");
+
   return folderProperties;
 }
 
