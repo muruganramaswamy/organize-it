@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title></title>
+
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="css/organizeit-default.css"/>
+
+    <script src="node_modules/jquery/jquery.js"></script>
+    <script src="node_modules/popper.js/dist/umd/popper.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="js/find-dup-folder.js"></script>
+  </head>
+
+  <body>    
+    <div class="container-fluid mt-4">
+      <form class="form-horizontal" id="idFormFdf" onsubmit="return processFormFdf()">
+        <div class="form-group row">
+          <label class="col-2 col-form-label text-right" for="idTextFolder">Folder</label>
+          <div class="col-6">
+            <input type="text" class="form-control" id="idTextFolder" placeholder="Enter folder">
+          </div>
+          <label class="btn-bs-file btn btn-secondary">
+            Browse
+            <input type="file" id="idFileFolder" onchange="setFileFolder()" multiple webkitdirectory/>
+          </label>
+        </div>
+
+        <div class="row justify-content-md-center">
+          <button type="submit" class="btn btn-primary">Find duplicate</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="container">
+      <div class="row clearfix">
+      <div class="col-md-12 column">
+        <table class="table table-bordered table-hover" id="tab_logic">
+          <thead>
+            <tr >
+              <th class="text-center">
+                Folder
+              </th>
+              <th class="text-center">
+                No of Subfolders
+              </th>
+              <th class="text-center">
+                No of Files
+              </th>
+              <th class="text-center">
+                Size
+              </th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+    <a id="add_row" class="btn btn-default pull-left">Add Row</a><a id='delete_row' class="pull-right btn btn-default">Delete Row</a>
+  </div>
+  </body>
+</html>
