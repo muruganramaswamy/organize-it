@@ -54,8 +54,10 @@ function getFolderProperties(folderPropertiesInp) {
     checksum: 0
   };
 
-  folderProperties.folder = folderPropertiesInp.folder;
+  document.getElementById("idProgressContent").textContent = folderPropertiesInp.folder;
+  document.getElementById("idProgressContent").show;
 
+  folderProperties.folder = folderPropertiesInp.folder;
   var folderContents = fs.readdirSync(folderProperties.folder, 'utf8');
   
   folderContents.forEach(file => {
@@ -82,69 +84,7 @@ function getFolderProperties(folderPropertiesInp) {
   });
 
   folderProperties.checksum = md5dir(folderProperties.folder);
-
   console.log(folderProperties);
-
-  document.write(folderProperties.folder);
-  document.write("<br>");
-  document.write(folderProperties.nSubfolders);
-  document.write("<br>");
-  document.write(folderProperties.nFiles);
-  document.write("<br>");
-  document.write(folderProperties.folderSize);
-  document.write("<br>");
-  document.write(folderProperties.checksum);
-  document.write("<br>");
-
+    
   return folderProperties;
-}
-
-function getFolderContent1(folder) {
-  var nFiles;
-  try {
-    console.log(folder);
-    var checksum = md5dir(folder);
-
-    var stats = countFiles(folder, function (err, results) {
-      console.log(results);
-      filesCollection.push({
-        currentFile: folder,
-        nFiles: results.files,
-        nSubfolders: results.dirs,
-        folderSize: results.bytes,
-        md5hash: checksum
-      })
-    }); 
-
-    console.log('current count', stats);    
-  } catch (error) {
-    console.log(error)
-  }  
-
-  var folderContents = fs.readdirSync(folder, 'utf8');
-  
-  folderContents.forEach(file => {
-    var currentFolderContent = path.join(folder + '/' + file);
-
-    try {
-      if (fs.statSync(currentFolderContent).isFile()) {  
-        checksum = md5File.sync(currentFolderContent);
-        var stats = countFiles(currentFolderContent, function (err, results) {
-          filesCollection.push({
-            currentFile: currentFolderContent,
-            nFiles: results.files,
-            nSubfolders: results.dirs,
-            folderSize: results.bytes,
-            md5hash: checksum
-          })
-        });
-      }
-      else {
-        getFolderContent(currentFolderContent);
-        nFiles += 1;
-      }
-    } catch (error) {
-       console.log(error)
-    }
-  });
 }
